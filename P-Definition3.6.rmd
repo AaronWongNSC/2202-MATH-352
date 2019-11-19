@@ -1,0 +1,23 @@
+---
+title: "Introduction to Probability - Definition 3.6"
+output: html_notebook
+---
+
+Definition 3.6: Let $n$ be a positive integer, and let $p$ be a real number between 0 and 1. Let $B$ be the random variable which counts the number of successes in a Bernoulli trials proess with parameters $n$ and $p$. Then the distribution $b(n, p, k)$ of $B$ is called the binomial distribution.
+
+This script graphs the binomial distribution.
+
+```{r}
+# Define the parameters
+n <- 100
+p <- 0.5
+
+# Set the x and y plot values
+k <- 0:n
+b <- dbinom(k, n, p)
+
+# Plot the function
+plot(k, b, type='h',
+     main=paste('Binomial Distribution, n =',n))
+```
+

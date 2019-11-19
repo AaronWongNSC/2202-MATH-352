@@ -1,0 +1,33 @@
+---
+title: "Introduction to Probability - Example 1.3b"
+output: html_notebook
+---
+
+Example 1.3b: If you roll a pair of dice 24 times, is it more common to roll a pair of 6s or to not roll a pair of 6s? What about for 25 rolls?
+
+```{r}
+# The plyr package has the mapvalues function
+require(plyr)
+
+# Define the parameters
+max_trials <- 10000
+num_rolls <- 25
+
+# Create a matrix that has max_trials*num_rolls rows and 2 columns. This represents the dice being rolled in pairs.
+demere <- rowSums(matrix(sample(1:6, 2*max_trials*num_rolls, replace=T), ncol=2))
+
+# Convert each pair of dice into an individual success or failure and count the number of successes in each row. We consider a pair of 6s a success.
+demere_successes <-
+  rowSums(matrix(mapvalues(demere,
+                           c(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+                           c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)),
+                 ncol=num_rolls))
+
+# Convert the number of successes for each set of rolls into a logical value representing whether or not a pair of 6s was rolled.
+trials <- (demere_successes > 0)
+
+# Display the final results
+barplot(table(trials), main=paste("A pair of 6s was rolled in", num_rolls, "attempts"))
+
+summary(trials)
+```

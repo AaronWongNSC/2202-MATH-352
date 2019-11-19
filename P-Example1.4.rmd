@@ -1,0 +1,27 @@
+---
+title: "Introduction to Probability - Example 1.4"
+output: html_notebook
+---
+
+Example 1.4: We will flip a coin 40 times. Every time a head comes up we win a unit, and every time a tail comes up we lose a unit. Graph the wins or losses after each flip.
+
+```{r}
+# Define the parameters
+max_trials <- 40
+
+# Set up the possible outcomes
+possible_outcomes <- c(-1,1)
+
+# Get the individual results
+results <- sample(possible_outcomes, max_trials, replace=T)
+
+# Get the cululative results
+cumulative <- cumsum(results)
+
+# Plot the graph
+plot(cumulative, type='l',
+     main='Heads = +1, Tails = -1',
+     xlab='Flips',
+     ylab='Winnings')
+```
+

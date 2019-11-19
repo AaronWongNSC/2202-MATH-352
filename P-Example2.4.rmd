@@ -1,0 +1,22 @@
+---
+title: "Introduction to Probability - Example 2.4"
+output: html_notebook
+---
+
+Example 2.4: Suppose that two random real numbers in [0,1] are chosen and add them together. Let X be the sum. How is X distributed?
+
+```{r}
+# Define the parameters
+max_trials <- 10000
+
+# Pick two random values between 0 and 1.
+first_value <- runif(max_trials)
+second_value <- runif(max_trials)
+
+# Compute X
+X <- first_value + second_value
+
+# Create the histogram
+hist(X)
+```
+
