@@ -1,0 +1,30 @@
+---
+title: "Introduction to Probability - Example 3.10"
+output: html_notebook
+---
+
+Example 3.10: A Galton board is a board in which a large number of BB-shots are dropped from a chute at the top of the board and deflected off a number of pins on their way down to the bottom of the board. We are going to simulate this
+
+```{r}
+# Define the parameters
+require(plyr)
+max_trials <- 100000
+rows_of_pins <- 50
+p <- 0.5
+
+# Set up the graph of the binomial distribution
+x <- 0:rows_of_pins
+y <- dbinom(x, rows_of_pins, p)
+
+# Run the Galton board simulation
+galton <- matrix(runif(rows_of_pins*max_trials), ncol=rows_of_pins)
+galton_logic <- (galton < p)
+galton_movement <- mapvalues(galton_logic, c(TRUE, FALSE), c(1, 0))
+trials <- rowSums(galton_movement)
+
+# Plot the result
+hist(trials, breaks=0:rows_of_pins, xlab='Final Position')
+lines(x-0.5,y*max_trials)
+
+```
+
