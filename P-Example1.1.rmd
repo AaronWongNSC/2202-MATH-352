@@ -1,0 +1,17 @@
+---
+title: "Introduction to Probability - Example 1.1"
+output: html_notebook
+---
+
+Example 1.1: Generate random numbers in the interval $[0,1]$.
+
+```{r}
+# Define the parameters
+max_trials <- 20
+
+# Create a matrix that has max_trials rows and 4 columns. This represents the dice rolls.
+random_values <- runif(max_trials, min = 0, max = 1)
+
+# Display the final results
+random_values
+```

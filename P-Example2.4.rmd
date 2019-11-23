@@ -1,6 +1,10 @@
 ---
 title: "Introduction to Probability - Example 2.4"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
 ---
 
 Example 2.4: Suppose that two random real numbers in [0,1] are chosen and add them together. Let X be the sum. How is X distributed?

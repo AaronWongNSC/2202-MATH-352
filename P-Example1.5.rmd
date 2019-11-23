@@ -1,0 +1,24 @@
+---
+title: "Introduction to Probability - Example 1.5"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+Example 1.5: Four Horses (Acorn, Balky, Chestnut, and Dolby) are run in many races. It is estimated that Acorn wins 30% of the time, Balky 40% of the time, Chestnut 20% of the time, and Dolby 10% of the time. Simulate the horse race.
+
+```{r}
+# Define the parameters
+max_trials <- 10000
+
+# Set up the possible outcomes
+possible_outcomes <- c('Acorn','Balky', 'Chestnut', 'Dolby')
+
+# Get the individual results
+results <- sample(possible_outcomes, max_trials, replace=T, c(.3, .4, .2, .1))
+
+# Display the final results
+table(results)
+barplot(table(results))
+```

@@ -1,0 +1,120 @@
+---
+title: "Introduction to Probability - Example 3.11"
+output:
+  html_document:
+    df_print: paged
+---
+
+Example 3.11: Suppose that your company makes a headache medicine that is 60% effective. This means that when the drug is taken to cure a headache, it works 60% of the time. Someone in the company has proposed an additive that they think will make it more effective and is proposing that you run a test on 100 people to demonstrate efficacy. Your job is to determine how many people $M$ need to have their headaches cured to feel confident that the additive worked.
+
+### Background information:
+
+1. Type 1 error: Rejecting the null hypothesis when it's true.
+ * To avoid this error, we need to pick a large enough number of cured headaches to be confident that it actually worked.
+2. Type 2 error: Failing to reject the null hypothesis when it's false.
+ * To avoid this error, we need to pick a small enough number of cured headaches so that we don't make it unnecessarily difficult to prove that it works.
+
+### Define the Hypothesis
+
+ * The Null Hypothesis ($H_0$): The medicine with additive is 60% effective.
+
+### Phase 1: Rejecting the Null Hypothesis
+
+We want to determine the probability that at least $m$ people are cured under the null hypothesis. This establishes what we might expect to see when the additive is ineffective. We want to pick $m$ large enough so that we can be reasonably confident that we're seeing something different. We will set the standard at 95% confidence.
+
+Here is the graph of the binomial distribution for $n = 100$ and $p = 0.6$. This shows the distribution of values we expect to see under the null hypothesis.
+```{r}
+n <- 100
+p <- 0.6
+
+m <- 0:100
+b <- dbinom(m, n, p)
+
+plot(m, b, type='l')
+```
+
+Here is the graph of the cumulative mass function. This shows us the probability that $m$ or fewer people were cured under the null hypothesis.
+
+```{r}
+b.cum <- cumsum(b)
+
+plot(m, b.cum, type='l')
+```
+
+We want to see this number be higher than 0.95. This 95% confidence level just means that we want the result to be in the 95th percentile of possible outcomes under the null hypothesis.
+
+```{r}
+b.cum <- cumsum(b)
+
+plot(m, b.cum, type='l')
+abline(0.95, 0, col = 'red')
+```
+
+We will zoom in on the important region to find the crossover point.
+
+```{r}
+x_zoom <- 65:75
+
+plot(x_zoom, b.cum[x_zoom], type='l', xaxt='n')
+axis(1, at=65:75, las=2)
+abline(0.95, 0, col='red')
+abline(v=68.5, col='blue')
+```
+
+This shows us that we want to have $M$ be at least 69.
+
+### Phase 2: Setting an Upper Limit
+
+We have shown that if at least 69 people are cured, then we should feel pretty confident that the drug is not effective at the 60% rate. We don't know how much better it might be and whether it is worth pursuing.
+
+After consulting with the company, it is determined that they would make the investment if they were 95% confident that the drug was 80% effective.
+
+This gives us a new hypothesis to consider:
+
+ * Another Hypothesis ($H_1$): The medicine with additive is 80% effective.
+
+Following the same pattern as before, here are the binomial and cumulative mass distributions.
+
+```{r}
+n <- 100
+p <- 0.8
+
+m <- 0:100
+b <- dbinom(m, n, p)
+
+plot(m, b, type='l')
+
+b.cum <- cumsum(b)
+
+plot(m, b.cum, type='l')
+```
+
+This time, we want to find out how far down we need to push $m$ so that we can be above the 0.05 (5%) point of the cumulative distribution.
+
+```{r}
+b.cum <- cumsum(b)
+
+plot(m, b.cum, type='l')
+abline(0.05, 0, col = 'red')
+```
+
+We will zoom in on the important region to find the crossover point.
+
+```{r}
+x_zoom <- 65:75
+
+plot(x_zoom, b.cum[x_zoom], type='l', xaxt='n')
+axis(1, at=65:75, las=2)
+abline(0.05, 0, col='red')
+abline(v=73.7, col='blue')
+```
+
+From this, we see that we need no more than 73 people to be cured to be 95% confident that the additive is 80% effective. More precisely, the outcome is not in the bottom 5th percentile under the assumption that the drug is 80% effective.
+
+### Conclusion
+
+From Phase 1, we found that $m$ needed to be at least 69 for us to be 95% confident that the additive improved the effectiveness of the medicine.
+
+From Phase 2, we found that $m$ needed to be no larger than 73 for us to be 95% confident that the medicine was 80% effective.
+
+Any value of $m$ between 69 and 73 will serve as an appropriate measure to determine the effectiveness of the additive.

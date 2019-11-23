@@ -1,0 +1,24 @@
+---
+title: "Introduction to Probability - Example 1.2"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+Example 1.2: Generate random coin flips.
+
+```{r}
+# Define the parameters
+max_trials <- 10000
+
+# Set up the possible outcomes
+possible_outcomes <- c('H','T')
+
+# Get the individual results
+results <- sample(possible_outcomes, max_trials, replace=T)
+
+# Display the final results
+table(results)
+barplot(table(results))
+```
