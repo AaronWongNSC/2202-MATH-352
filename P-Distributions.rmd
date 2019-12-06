@@ -1,0 +1,123 @@
+---
+title: "Introduction to Probability - Distributions"
+output:
+  html_document:
+    df_print: paged
+---
+
+Uniform Distribution
+
+```{r}
+# Define the parameters
+max_trials <- 10000
+min_value <- 1
+max_value <- 6
+
+# Create a matrix that has max_trials rows and 4 columns. This represents the dice rolls.
+random_values <- sample(min_value:max_value, max_trials, replace=T)
+
+# Display the final results
+barplot(table(random_values))
+```
+
+Binomial Distribution
+
+```{r}
+# Define the parameters
+max_trials <- 10000
+n <- 100
+p <- 0.5
+
+k <- 0:n
+
+# Simulated distribution
+random_values <- rbinom(max_trials, n, p)
+
+# Exact distribution
+b <- dbinom(k, n, p)
+
+# Display the final results
+
+plot(table(random_values)/max_trials, xlim=c(0,n))
+lines(k, b, col='blue')
+```
+
+Geometric Distribution
+
+```{r}
+# Define the parameters
+max_trials <- 10000
+n <- 20
+p <- 0.2
+
+q <- 1-p
+k <- 0:n
+
+# Simulated distribution
+random_values <- rgeom(max_trials, p)
+
+# Exact distribution
+b <- dgeom(k, p)
+
+# Display the final results
+
+plot(table(random_values)/max_trials, xlim=c(0,n))
+lines(k, b, col='blue')
+```
+
+Negative Binomial Distribution
+
+Note: The book counts the total number of trials whereas R counts the number of trials beyond the minimum. The first set of plots uses the native R definition and the second set of plots have been shifted to match the book.
+
+```{r}
+# Define the parameters
+max_trials <- 10000
+n <- 20
+p <- 0.25
+k <- 2
+
+q <- 1-p
+x <- 0:n
+
+# Simulated distribution
+random_values <- rnbinom(max_trials, k, p)
+
+# Exact distribution
+b <- dnbinom(x, k, p)
+
+# Display the final results
+
+plot(table(random_values)/max_trials, xlim=c(0,n))
+lines(x, b, xlim=c(0,n), col='blue')
+
+plot(table(random_values+k)/max_trials, xlim=c(0,n))
+lines(x+k, b, xlim=c(0,n), col='blue')
+
+```
+
+Poisson Distribution
+
+The Poisson distribution can be used as an approximation of the binomial distribution under certain conditions.
+
+```{r}
+# Define the parameters
+max_trials <- 100000
+n <- 100
+p <- 0.001
+max_x <- 10
+
+
+lambda <- n*p
+k <- 0:max_x
+
+# Simulated distribution
+random_values <- rbinom(max_trials, n, p)
+
+# Exact distribution
+poisson <- dpois(k, lambda)
+
+# Display the final results
+
+plot(table(random_values)/max_trials, xlim=c(0,max_x))
+lines(k, poisson, col='red')
+```

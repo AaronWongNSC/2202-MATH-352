@@ -1,0 +1,27 @@
+---
+title: "Introduction to Probability - Example 5.3"
+output:
+  html_document:
+    df_print: paged
+---
+
+Example 5.3: A typist makes one mistake per 1000 words. They are typing 100 words per page. Compute the distribution for the number of errors per page as both an independent Bernoulli trials process and as a Poisson distribution.
+
+```{r}
+# Define the paramteres
+p <- 1/1000
+n <- 100
+k <- 0:10
+
+lambda <- p*n
+
+# Bernoullil Trials Process
+errors_per_page_bernoulli <- dbinom(k, n, p)
+
+# Poisson Distribution
+errors_per_page_poisson <- dpois(k, lambda)
+
+# Display the final results
+plot(k, errors_per_page_bernoulli, col='red')
+lines(k, errors_per_page_poisson, col='blue')
+```

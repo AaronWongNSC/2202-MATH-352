@@ -1,0 +1,81 @@
+---
+title: "Introduction to Probability - Example 5.6"
+output:
+  html_document:
+    df_print: paged
+---
+
+Example 5.6: Suppose that we survey 50 people about their political leanings, and the result was the following:
+
+```{r}
+require(knitr)
+survey <- data.frame(Democrat = c(24, 8), Republican = c(4,14), row.names=c('Female', 'Male'))
+
+survey <- rbind(survey, 'Total' = c(sum(survey$Democrat),sum(survey$Republican)))
+survey$Total <- survey$Democrat + survey$Republican
+
+knitr::kable(survey)
+```
+
+
+### Background information
+
+The null hypothesis is that the variables are independent. There are three steps to Fisher's Exact Test:
+
+1. Get the sample data. (Note: This is the given information above.)
+2. Determine the "expected" sample distribution.
+3. Determine the probability that the deviation is the result of chance under the null hypothesis.
+
+### Compute the expected distribution.
+
+We calculate the expected number of Democratic and Republican females by using the proportions from the survey. Then we do the same for the males.
+
+```{r}
+expected.exact <- data.frame(Democrat = survey['Total','Democrat']/survey['Total','Total']*survey$Total,
+                       Republican = survey['Total','Republican']/survey['Total','Total']*survey$Total,
+                       row.names=c('Female', 'Male', 'Total'))
+
+expected.exact$Total <- expected.exact$Democrat + expected.exact$Republican
+
+knitr::kable(expected.exact)
+
+```
+
+In order to do the calculations, we need to round these to the nearest integer.
+
+```{r}
+expected.approx <- round(expected.exact)
+
+knitr::kable(expected.approx)
+```
+
+### Compute the Probability of Deviation from the Expected
+
+We will focus on the Democratic females. We can use the hypergeometric distribution to calculate the probability of drawing $k$ Democrats when drawing the 28 females. We want to know what the chances of drawing at least 24 democrats would be. To get the exact value, we simply add up the probabilities for all of the $k$ values from 24 through 28.
+
+```{r}
+
+m <- expected.approx['Total', 'Democrat']
+n <- expected.approx['Total', 'Republican']
+j <- expected.approx['Female', 'Total']
+
+k <- 0:j
+
+
+h <- dhyper(k, m, n, j)
+
+plot(k, h, type='l')
+abline(v=24, col='red')
+
+deviation <- 24:28
+dev.prob <- dhyper(deviation, m, n, j)
+sum(dev.prob)
+
+```
+
+
+
+
+### Conclusion
+
+Under the null hypothesis, there is about a 0.04% chance that we could have gotten 24 or more Democratic females in 28 draws. This means we ought to reject the null hypothesis and conclude that gender and political affilation are dependent variables.

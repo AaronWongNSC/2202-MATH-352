@@ -1,0 +1,45 @@
+---
+title: "Introduction to Probability - Example 5.4"
+output:
+  html_document:
+    df_print: paged
+---
+
+Example 5.4: Consider a 10x10 grid of squares. 400 points are randomly placed on the grid. Determine the distribution of the number of points per square.
+
+```{r}
+# Define the paramteres
+points <- 400
+max_val <- 10
+
+# Create random coordinates
+x <- runif(points, min=0, max=max_val)
+y <- runif(points, min=0, max=max_val)
+
+# Plot the grid and points
+plot(x,y, xlim=c(0,max_val), ylim=c(0,max_val),
+     pch=20, asp=1, cex=0.5,
+     axes=F, xlab='', ylab='')
+
+for (i in 0:max_val)
+{
+  segments(0, i, max_val, i)
+  segments(i, 0, i, max_val)
+}
+
+# Count points in each grid
+x_int <- floor(x)+1
+y_int <- floor(y)+1
+
+count <- matrix(rep(0,max_val^2),nrow=max_val)
+for (i in 1:points)
+{
+  count[x_int[i], y_int[i]] <- count[x_int[i], y_int[i]] + 1
+}
+
+# Plot the outcomes
+
+plot(table(count)/max_val^2)
+points(0:15, dpois(0:15, points/max_val^2))
+
+```
