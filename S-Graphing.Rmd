@@ -1,0 +1,119 @@
+---
+title: "Graphing Distributions in R"
+output: html_notebook
+---
+
+Frequency Table: Single values only
+
+```{r}
+# Set Parameters
+max_trials <- 100
+
+# Generate Data
+possible_outcomes <- c('A', 'B', 'C')
+results <- sample(possible_outcomes, max_trials, replace=T)
+
+# Show Frequency Table
+count(results)
+```
+
+Frequency Table: Multiple values from dataframe
+
+```{r}
+# Set parameters
+max_rows <- 100
+
+# Generate Data
+possible_outcomes_1 <- c('A', 'B', 'C')
+possible_outcomes_2 <- c('X', 'Y', 'Z')
+col1 <- sample(possible_outcomes_1, max_rows, replace=T)
+col2 <- sample(possible_outcomes_2, max_rows, replace=T)
+df <- data.frame('col1' = col1, 'col2' = col2)
+
+# Show Frequency Tables
+count(df)
+count(df, 'col1')
+count(df, 'col2')
+count(df, c('col1', 'col2'))
+```
+
+Pie Chart
+
+```{r}
+# Set Parameters
+num_wedges <- 7
+min_val <- 20
+max_val <- 40
+
+# Generate random data
+quantities <- runif(num_wedges, min = min_val, max = max_val)
+
+# Create labels
+section_labels <- paste(rep('Label', num_wedges), 1:num_wedges)
+
+# Create dynamically calculated percentages
+percentages <- round(quantities/sum(quantities)*100, 1)
+graph_labels <- paste(section_labels, ': ', percentages, '%', sep='')
+
+# Draw pie chart
+pie(quantities, labels = graph_labels, main = 'Pie Chart')
+
+
+```
+
+Bar Chart: Numbers
+
+```{r}
+# Set Parameters
+max_trials <- 100
+
+# Generate Data
+possible_outcomes <- c('A', 'B', 'C')
+results <- sample(possible_outcomes, max_trials, replace=T)
+
+# Show Frequency Table
+barplot(table(results), main='Frequency Table')
+barplot(table(results), main='Horizontal Frequency Table', horiz=T)
+```
+
+Stem and Leaf Chart: R's stem and leaf plots sometimes skip values in the stem. You need to recognize the missing values when the digits on the leaves cycle.
+
+```{r}
+
+# Set Parameters
+num_trials <- 30
+min_val <- 20
+max_val <- 40
+
+# Generate random data
+quantities <- runif(num_trials, min = min_val, max = max_val)
+
+# Show stem and leaf chart
+stem(quantities)
+```
+
+Histograms:
+
+```{r}
+# Set Parameters
+num_trials <- 1000
+mu <- 0
+sigma <- 1
+
+# Generate random data
+results <- rnorm(num_trials, mean=mu, sd=sigma)
+
+# Show Historgram
+hist(results)
+hist(results, breaks=seq(from=-5, to=5, by=0.5))
+
+```
+
+Frequency Polygon: Excessively complicated. Just use a histogram.
+
+Box Plots
+
+```{r}
+
+```
+
