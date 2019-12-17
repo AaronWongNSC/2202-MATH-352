@@ -1,12 +1,17 @@
 ---
 title: "Graphing Distributions in R"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
-Frequency Table: Single values only
+### Frequency Table: Single values only
+
+The plyr library gives us access to a function that counts the results.
 
 ```{r}
 # Set Parameters
+require(plyr)
 max_trials <- 100
 
 # Generate Data
@@ -14,12 +19,17 @@ possible_outcomes <- c('A', 'B', 'C')
 results <- sample(possible_outcomes, max_trials, replace=T)
 
 # Show Frequency Table
+table(results)
 count(results)
 ```
 
-Frequency Table: Multiple values from dataframe
+### Frequency Table: Multiple values from dataframe
+
+When we have a dataframe, sometimes we want to count the number of times particular combinations arise. This code creates a data frame with random data and then shows different ways to count it.
 
 ```{r}
+require(plyr)
+
 # Set parameters
 max_rows <- 100
 
@@ -30,14 +40,17 @@ col1 <- sample(possible_outcomes_1, max_rows, replace=T)
 col2 <- sample(possible_outcomes_2, max_rows, replace=T)
 df <- data.frame('col1' = col1, 'col2' = col2)
 
+df
+
 # Show Frequency Tables
-count(df)
 count(df, 'col1')
 count(df, 'col2')
 count(df, c('col1', 'col2'))
 ```
 
-Pie Chart
+### Pie Chart
+
+Pie charts are created automatically as long as you have the quantities. If you want to do label the percentages, you will need to do that manually.
 
 ```{r}
 # Set Parameters
@@ -61,7 +74,7 @@ pie(quantities, labels = graph_labels, main = 'Pie Chart')
 
 ```
 
-Bar Chart: Numbers
+### Bar Chart: Numbers
 
 ```{r}
 # Set Parameters
@@ -76,7 +89,9 @@ barplot(table(results), main='Frequency Table')
 barplot(table(results), main='Horizontal Frequency Table', horiz=T)
 ```
 
-Stem and Leaf Chart: R's stem and leaf plots sometimes skip values in the stem. You need to recognize the missing values when the digits on the leaves cycle.
+### Stem and Leaf Chart:
+
+R's stem and leaf plots sometimes skip values in the stem. You need to recognize the missing values when the digits on the leaves cycle.
 
 ```{r}
 
@@ -92,7 +107,29 @@ quantities <- runif(num_trials, min = min_val, max = max_val)
 stem(quantities)
 ```
 
-Histograms:
+### Histograms:
+
+```{r}
+# Set Parameters
+num_trials <- 1000
+mu <- 0
+sigma <- 1
+
+# Generate random data
+results <- rnorm(num_trials, mean=mu, sd=sigma)
+
+# Show Historgram
+hist(results)
+hist(results, breaks=seq(from=-5, to=5, by=0.5))
+
+dens <- density(results)
+plot(dens$x, length(results)*dens$y, type='l')
+
+```
+
+### Frequency Polygon:
+
+If you are just plotting a function, this is just like plots from earlier. A density plot is given under histogram. It's a bit much to explain.
 
 ```{r}
 # Set Parameters
@@ -109,11 +146,22 @@ hist(results, breaks=seq(from=-5, to=5, by=0.5))
 
 ```
 
-Frequency Polygon: Excessively complicated. Just use a histogram.
 
-Box Plots
+### Box Plots:
+
+A boxplot is best through a data frame when you have multiple columns of data.
+
 
 ```{r}
+# Set Parameters
+num_trials <- 10
+
+gender <- sample(c('M','F'), num_trials, replace=T)
+number <- sample(20:50, num_trials, replace=T)
+
+df <- data.frame('Gender' = gender, 'Number' = number)
+
+boxplot(Number~Gender, data=df)
 
 ```
 

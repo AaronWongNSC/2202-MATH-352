@@ -35,11 +35,14 @@ random_values <- rbinom(max_trials, n, p)
 
 # Exact distribution
 b <- dbinom(k, n, p)
+cmf <- cumsum(b)
 
 # Display the final results
 
 plot(table(random_values)/max_trials, xlim=c(0,n))
 lines(k, b, col='blue')
+
+plot(k, cmf, type='l')
 ```
 
 Geometric Distribution
@@ -58,11 +61,14 @@ random_values <- rgeom(max_trials, p)
 
 # Exact distribution
 b <- dgeom(k, p)
+cmf <- cumsum(b)
 
 # Display the final results
 
 plot(table(random_values)/max_trials, xlim=c(0,n))
 lines(k, b, col='blue')
+
+plot(k, cmf, type='l')
 ```
 
 Negative Binomial Distribution
@@ -84,6 +90,7 @@ random_values <- rnbinom(max_trials, k, p)
 
 # Exact distribution
 b <- dnbinom(x, k, p)
+cmf <- cumsum(b)
 
 # Display the final results
 
@@ -92,6 +99,10 @@ lines(x, b, xlim=c(0,n), col='blue')
 
 plot(table(random_values+k)/max_trials, xlim=c(0,n))
 lines(x+k, b, xlim=c(0,n), col='blue')
+
+plot(x, cmf, type='l')
+
+plot(x+k, cmf, type='l',xlim=c(0,n))
 
 ```
 
@@ -115,9 +126,59 @@ random_values <- rbinom(max_trials, n, p)
 
 # Exact distribution
 poisson <- dpois(k, lambda)
+cmf <- cumsum(poisson)
 
 # Display the final results
 
 plot(table(random_values)/max_trials, xlim=c(0,max_x))
 lines(k, poisson, col='red')
+
+plot(k, cmf, type='l', xlim=c(0,max_x))
+
 ```
+
+Hypergeometric
+
+Book's notation: $h(N, k, n, x)$ where $N$ is the total number of balls, $k$ is the number of blue balls, $n$ is the number of drawn balls, and $x$ is the number of drawn balls that are blue.
+
+R's notation: dhyper(x, m, n, k) where m is the number of blue balls, n is the number of red balls,  k is the number of drawn balls, and x is the number of drawn balls that are blue. 
+
+```{r}
+# Define the parameters
+max_trials <- 100000
+
+# Setting up with the book's notation
+N <- 100
+k <- 30
+n <- 20
+
+# Translating to R's notation:
+m.R <- k
+n.R <- N-k
+k.R <- n
+
+x <- 0:n
+
+# Simulated distribution
+random_values <- rhyper(max_trials, m.R, n.R, k.R)
+
+# Exact distribution
+hyper <- dhyper(x, m.R, n.R, k.R)
+cmf <- cumsum(hyper)
+
+# Display the final results
+
+plot(table(random_values)/max_trials, xlim=c(0,n))
+lines(x, hyper, col='red')
+
+plot(x, cmf, type='l', xlim=c(0,n))
+
+```
+
+
+
+
+
+
+
+
