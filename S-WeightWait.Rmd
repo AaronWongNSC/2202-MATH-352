@@ -1,0 +1,91 @@
+---
+title: "Physician Reaction to Patient Weight"
+output:
+  html_document:
+    df_print: paged
+---
+
+### Load the Data
+
+```{r}
+
+library(readr)
+PhysicianWeight <- read_csv("C:/Users/1000151892/R/PhysicianWeight.csv")
+
+```
+
+### Separate the Data by Weight Category
+
+```{r}
+AverageWeight <- subset(PhysicianWeight, WEIGHT == 1)
+OverWeight <- subset(PhysicianWeight, WEIGHT == 2)
+
+```
+
+### Graph the Data 
+
+It is always important to have a visual sense of the data.
+
+```{r}
+barplot(table(factor(AverageWeight$TIME, levels = seq(0,60,5))), ylim=c(0,20), xlab='Minutes', ylab='Frequency', main='Average Weight')
+
+barplot(table(factor(OverWeight$TIME, levels = seq(0,60,5))), ylim=c(0,20), xlab='Minutes', ylab='Frequency', main='Overweight')
+
+boxplot(TIME~WEIGHT, data=PhysicianWeight, main='Waiting Time', xlab='', xaxt='n', ylim=c(0,60))
+axis(1, at=c(1,2), labels=c('Average Weight', 'Overweight'))
+```
+
+### Calculate the Statistics and 95% Confidence intervals
+
+```{r}
+n_Avg <- length(AverageWeight$TIME)
+M_Avg <- mean(AverageWeight$TIME)
+# M_Avg <- sum(AverageWeight$TIME)/length(AverageWeight$TIME)
+SD_Avg <- sd(AverageWeight$TIME)
+# SD_Avg <- sum((AverageWeight$TIME - M_Avg)^2)/(length(AgerageWeight$TIME - 1))
+SE_Avg <- SD_Avg/n_Avg
+
+t_Avg <- qt(0.975, df=n_Avg-1)
+
+Lower_Avg <- M_Avg - t_Avg * SE_Avg
+Upper_Avg <- M_Avg + t_Avg * SE_Avg
+
+n_Over <- length(OverWeight$TIME)
+M_Over <- mean(OverWeight$TIME)
+SD_Over <- sd(OverWeight$TIME)
+SD_Over <- sd(OverWeight$TIME)
+SE_Over <- SD_Over/n_Over
+
+t_Over <- qt(0.975, df=n_Over-1)
+
+Lower_Over <- M_Over - t_Over * SE_Over
+Upper_Over <- M_Over + t_Over * SE_Over
+
+print(c(Lower_Avg, Upper_Avg))
+print(c(Lower_Over, Upper_Over))
+
+```
+
+### Difference Between the Means
+
+```{r}
+M_Diff <- M_Avg - M_Over
+df_Diff <- (n_Avg - 1) + (n_Over - 1)
+SSE <- sum( (AverageWeight$TIME - M_Avg)^2 ) + sum( (OverWeight$TIME - M_Over)^2 )
+MSE <- SSE/df_Diff
+n.h <- 2/( (1/n_Avg) + (1/n_Over))
+t_Diff <- qt(0.975, df=df_Diff)
+
+SE_Diff <- (2*MSE/n.h)^(0.5)
+
+Lower_Diff <- M_Diff - t_Diff * SE_Diff
+Upper_Diff <- M_Diff + t_Diff * SE_Diff
+
+print(c(Lower_Diff, Upper_Diff))
+
+
+```
+
+
+
+
